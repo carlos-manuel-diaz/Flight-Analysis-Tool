@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>sheetView</class>
+ <widget class="QMainWindow" name="sheetView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,9 +23,9 @@
       <height>31</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
+    <layout class="QHBoxLayout" name="importHeader" stretch="0,0">
      <item>
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="csvList">
        <property name="editable">
         <bool>true</bool>
        </property>
@@ -35,7 +35,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="importButton">
        <property name="text">
         <string>Import</string>
        </property>
@@ -52,9 +52,9 @@
       <height>41</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="viewButtons">
      <item>
-      <widget class="QPushButton" name="pushButton_5">
+      <widget class="QPushButton" name="graphView">
        <property name="text">
         <string>Graph View</string>
        </property>
