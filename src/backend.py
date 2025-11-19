@@ -42,5 +42,3 @@ class TrackerEngine:
             return
         
         return self.df[time_col], self.df[value_col]
-
-    

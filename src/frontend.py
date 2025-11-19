@@ -1,20 +1,23 @@
 import sys
+import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
 from PySide6.QtCore import Qt
 from .ui.orion_v1 import Ui_sheetView
+from .ui.orion_v2 import Ui_mainWindow
 from .backend import TrackerEngine
-
+from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel
 
 class FlightTrackerApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_sheetView()
+        self.ui = Ui_mainWindow()
         self.ui.setupUi(self)
 
         self.engine = TrackerEngine()
         self.connections()
 
         self.ui.graphWidget.hide()
+        self.ui.tableView.hide()
 
         self.setWindowTitle("Orion")
         self.setFixedSize(800, 600)
@@ -22,7 +25,7 @@ class FlightTrackerApp(QMainWindow):
     def connections(self):
         self.ui.importButton.clicked.connect(self.import_clicked)
         self.ui.graphView.clicked.connect(self.graph_clicked)
-        # self.ui.pushButton_4.clicked.connect(self.sheet_clicked)
+        self.ui.sheetView_2.clicked.connect(self.sheet_clicked)
         print('connected')
 
     def import_clicked(self): #import button clicked
@@ -33,25 +36,52 @@ class FlightTrackerApp(QMainWindow):
 
     def graph_clicked(self): #graph button clicked
         print('Switching to graph view')
-        self.build_graph(self.ui.csvList.currentText())
+        self.display_graph(self.ui.csvList.currentText())
         self.ui.graphWidget.show()
+        self.ui.tableView.hide()
+
+    def sheet_clicked(self): #graph button clicked
+        print('Switching to sheet view')
+        self.display_sheet(self.ui.csvList.currentText())
+        self.ui.tableView.show()  
+        self.ui.graphWidget.hide()  
 
 
-    def build_graph(self, path): #build graph with currently selected path
+    def display_graph(self, path): #display graph with currently selected path
         current_csv = path
-
         if not current_csv:
             print("No CSV selected.")
             return
-
         time_x, accel_y = self.engine.extract(current_csv)
-
         if time_x is None or accel_y is None:
             print("Extraction failed.")
             return
-
         self.ui.graphWidget.clear()    
         self.ui.graphWidget.plot(time_x, accel_y)
+
+    def display_sheet(self, path): #display sheet with currently selected path
+        current_csv = path
+        if not current_csv:
+            print("No CSV selected.")
+            return
+        
+        model = QStandardItemModel()
+        self.ui.tableView.setModel(model)
+        self.ui.tableView.horizontalHeader().setStretchLastSection(True)
+
+        with open(current_csv, "r", newline="", encoding="utf-8") as fileInput:
+            reader = csv.reader(fileInput)
+            for i, row in enumerate(reader):
+                if i == 0:
+                    model.setHorizontalHeaderLabels(
+                        [col.strip().strip('"') for col in row]
+                    )
+                else:
+                    items = [QStandardItem(field.strip()) for field in row]
+                    model.appendRow(items)
+     
+        
+        
 
 
 
