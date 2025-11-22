@@ -1,9 +1,8 @@
 import sys
 import csv
-from PySide6.QtWidgets import QApplication, QWidget, QMainWindow
+from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt
-from .ui.orion_v1 import Ui_sheetView
-from .ui.orion_v2 import Ui_mainWindow
+from .ui.orion_v3 import Ui_mainWindow
 from .backend import TrackerEngine
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel
 
@@ -16,16 +15,15 @@ class FlightTrackerApp(QMainWindow):
         self.engine = TrackerEngine()
         self.connections()
 
-        self.ui.graphWidget.hide()
-        self.ui.tableView.hide()
+        self.ui.stackedWidget.setCurrentIndex(0)
 
         self.setWindowTitle("Orion")
-        self.setFixedSize(800, 600)
+        self.setBaseSize(800, 600)
 
     def connections(self):
         self.ui.importButton.clicked.connect(self.import_clicked)
-        self.ui.graphView.clicked.connect(self.graph_clicked)
-        self.ui.sheetView_2.clicked.connect(self.sheet_clicked)
+        self.ui.graphButton.clicked.connect(self.graph_clicked)
+        self.ui.sheetButton.clicked.connect(self.sheet_clicked)
         print('connected')
 
     def import_clicked(self): #import button clicked
@@ -35,23 +33,29 @@ class FlightTrackerApp(QMainWindow):
         self.engine.csvList.append(csv_path)
 
     def graph_clicked(self): #graph button clicked
-        print('Switching to graph view')
-        self.display_graph(self.ui.csvList.currentText())
-        self.ui.graphWidget.show()
-        self.ui.tableView.hide()
+        print('Switching to graph view')       
 
-    def sheet_clicked(self): #graph button clicked
+        if self.display_graph(self.ui.csvList.currentText()) == -1:
+            self.ui.stackedWidget.setCurrentIndex(0)
+        else:
+            self.ui.stackedWidget.setCurrentIndex(1)
+    
+
+
+    def sheet_clicked(self): #sheet button clicked
         print('Switching to sheet view')
-        self.display_sheet(self.ui.csvList.currentText())
-        self.ui.tableView.show()  
-        self.ui.graphWidget.hide()  
+
+        if self.display_sheet(self.ui.csvList.currentText()) == -1:
+            self.ui.stackedWidget.setCurrentIndex(0)
+        else:
+            self.ui.stackedWidget.setCurrentIndex(2)
 
 
     def display_graph(self, path): #display graph with currently selected path
         current_csv = path
         if not current_csv:
             print("No CSV selected.")
-            return
+            return -1
         time_x, accel_y = self.engine.extract(current_csv)
         if time_x is None or accel_y is None:
             print("Extraction failed.")
@@ -63,11 +67,11 @@ class FlightTrackerApp(QMainWindow):
         current_csv = path
         if not current_csv:
             print("No CSV selected.")
-            return
+            return -1
         
         model = QStandardItemModel()
-        self.ui.tableView.setModel(model)
-        self.ui.tableView.horizontalHeader().setStretchLastSection(True)
+        self.ui.sheetWidget.setModel(model)
+        self.ui.sheetWidget.horizontalHeader().setStretchLastSection(True)
 
         with open(current_csv, "r", newline="", encoding="utf-8") as fileInput:
             reader = csv.reader(fileInput)
