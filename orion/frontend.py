@@ -2,9 +2,9 @@ import sys
 import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt
-from .ui.orion_v3 import Ui_mainWindow
+from .ui.orion_v31 import Ui_mainWindow
 from .backend import TrackerEngine
-from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel
+from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 
 class FlightTrackerApp(QMainWindow):
     def __init__(self):
@@ -94,7 +94,13 @@ def main():
 
     app.setApplicationName("Orion")
     app.setApplicationVersion("1.0")
+    
+    # palette = QPalette()
+    # palette.setColor(QPalette.ColorRole.Window, QColor(0, 0, 0))  
+    # app.setPalette(palette)
 
+    app.setStyle('Fusion')
+    
 
     window = FlightTrackerApp()
     window.setWindowIcon(QIcon("assets/seds.png"))
