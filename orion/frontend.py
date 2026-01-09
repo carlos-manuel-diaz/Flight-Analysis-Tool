@@ -3,7 +3,8 @@ import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt
 from .ui.orion_v4 import Ui_mainWindow
-from .backend import TrackerEngine
+from .backend.TrackerEngine import TrackerEngine
+from .backend.database import database_init
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 
 class FlightTrackerApp(QMainWindow):
@@ -11,6 +12,7 @@ class FlightTrackerApp(QMainWindow):
         super().__init__()
         self.ui = Ui_mainWindow()
         self.ui.setupUi(self)
+
 
         self.engine = TrackerEngine()
         self.connections()
@@ -137,7 +139,7 @@ def main():
 
     app.setStyle('Fusion')
     
-
+    database_init()
     window = FlightTrackerApp()
     window.setWindowIcon(QIcon("assets/seds.png"))
     window.show()
