@@ -4,3 +4,5 @@ build
 *.egg-info
 ideas.txt
 data
+
+.vs

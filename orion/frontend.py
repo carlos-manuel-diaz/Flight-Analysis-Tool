@@ -2,9 +2,10 @@ import sys
 import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt
-from .ui.orion_v4 import Ui_mainWindow
+from .ui.orion_v5 import Ui_mainWindow
 from .backend.TrackerEngine import TrackerEngine
-from .backend.database import database_init
+from .backend.ProfileEngine import ProfileEngine
+from .backend.database import database_init, createDefaultProfile, loadProfileNames
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 
 class FlightTrackerApp(QMainWindow):
@@ -14,8 +15,17 @@ class FlightTrackerApp(QMainWindow):
         self.ui.setupUi(self)
 
 
-        self.engine = TrackerEngine()
+        self.trackerEngine = TrackerEngine()
+        self.profileEngine = ProfileEngine()
         self.connections()
+
+        if createDefaultProfile():
+            profileList = loadProfileNames()
+            self.profileEngine.profileList.append(profileList[0])
+            self.ui.profileList.addItem(profileList[0])
+            # for i in profileList:
+            #     self.profileEngine.profileList.append(i)
+            #     self.ui.profileList.addItem(i)
 
         self.ui.stackedWidget.setCurrentIndex(0)
 
@@ -31,9 +41,9 @@ class FlightTrackerApp(QMainWindow):
 
     def import_clicked(self): #import button clicked
         print('import clicked!')
-        csv_path = self.engine.addCsv()
+        csv_path = self.trackerEngine.addCsv()
         self.ui.csvList.addItem(csv_path)
-        self.engine.csvList.append(csv_path)
+        self.trackerEngine.csvList.append(csv_path)
 
     def graph_clicked(self): #graph button clicked
         print('Switching to graph view')       
@@ -67,7 +77,7 @@ class FlightTrackerApp(QMainWindow):
         if not current_csv:
             print("No CSV selected.")
             return -1
-        time_x, accel_y = self.engine.extract(current_csv)
+        time_x, accel_y = self.trackerEngine.extract(current_csv)
         if time_x is None or accel_y is None:
             print("Extraction failed.")
             return
@@ -100,7 +110,7 @@ class FlightTrackerApp(QMainWindow):
         if not current_csv:
             print("No CSV selected.")
             return -1
-        time_x, accel_y = self.engine.extract(current_csv)
+        time_x, accel_y = self.trackerEngine.extract(current_csv)
         if time_x is None or accel_y is None:
             print("Extraction failed.")
             return
@@ -140,6 +150,8 @@ def main():
     app.setStyle('Fusion')
     
     database_init()
+    
+    
     window = FlightTrackerApp()
     window.setWindowIcon(QIcon("assets/seds.png"))
     window.show()
