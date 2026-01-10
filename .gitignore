@@ -4,5 +4,5 @@ build
 *.egg-info
 ideas.txt
 data
-
+profiles.db
 .vs

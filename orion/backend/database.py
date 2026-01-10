@@ -6,7 +6,7 @@ import sqlite3
 def database_init(): 
   """ Creates database """ 
   try:
-    conn = sqlite3.connect('data/profiles.db')
+    conn = sqlite3.connect('profiles.db')
     cursor = conn.cursor()
 
     cursor.execute('''
@@ -17,8 +17,11 @@ def database_init():
         )
 ''')
     
+
+
     conn.commit()
 
+    
 
     conn.close()
   except Exception as e:
@@ -29,36 +32,34 @@ def database_init():
 def createDefaultProfile() -> bool:
   """ Create default, starting profile"""
   try:
-      with sqlite3.connect('data/profiles.db') as conn:
+      with sqlite3.connect('profiles.db') as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT EXISTS (SELECT 1 FROM profile)") # 0 if profile list is empty, else 1
         check = cursor.fetchone()  
-        if not check:
+        if check[0] == 0:
            cursor.execute(
-                "INSERT OR REPLACE INTO profile (name, description) VALUES (?, ?)",
-                ("Default", "Default profile created at app startup"),
+                "INSERT INTO profile (name, description) VALUES (?, ?)",
+                ("Default", "Default profile created at app startup."),
             )
            conn.commit()
-           return True
-        return False
+           print("Default profile created!")
+           
 
   except Exception as e:
-      print(f"Error createing default profile: {e}")
+      print(f"Error creating default profile: {e}")
       raise  
          
          
 def loadProfileNames():
     try:
-      with sqlite3.connect('data/profiles.db') as conn:   
-         cursor = conn.cursor() 
-         cursor.execute("SELECT name FROM profile")  
-         profileNames = cursor.fetchall()  
-
-         print("Profiles loaded")
-         return profileNames
+        with sqlite3.connect('profiles.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM profile")
+            return [row[0] for row in cursor.fetchall()]
     except Exception as e:
-      print(f"Error fetching profile names: {e}")
-      raise  
+        print(f"Error fetching profile names: {e}")
+        raise
+
 
 
 # def createProfile():

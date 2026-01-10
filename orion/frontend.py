@@ -19,10 +19,12 @@ class FlightTrackerApp(QMainWindow):
         self.profileEngine = ProfileEngine()
         self.connections()
 
-        if createDefaultProfile():
-            profileList = loadProfileNames()
-            self.profileEngine.profileList.append(profileList[0])
-            self.ui.profileList.addItem(profileList[0])
+        createDefaultProfile()
+
+
+        # if createDefaultProfile():
+        #     self.profileEngine.profileList.append(profileList[0])
+        #     self.ui.profileList.addItem(profileList[0])
             # for i in profileList:
             #     self.profileEngine.profileList.append(i)
             #     self.ui.profileList.addItem(i)
@@ -37,6 +39,7 @@ class FlightTrackerApp(QMainWindow):
         self.ui.graphButton.clicked.connect(self.graph_clicked)
         self.ui.sheetButton.clicked.connect(self.sheet_clicked)
         self.ui.resetButton.clicked.connect(self.dual_clicked)
+        self.ui.profileButton.clicked.connect(self.profile_clicked)
         print('connected')
 
     def import_clicked(self): #import button clicked
@@ -133,7 +136,13 @@ class FlightTrackerApp(QMainWindow):
                     model.appendRow(items)           
      
         
-        
+    def profile_clicked(self):
+        print("Profiles revealed: ")
+        for i in loadProfileNames():
+            print(i)
+
+
+
 
 
 
