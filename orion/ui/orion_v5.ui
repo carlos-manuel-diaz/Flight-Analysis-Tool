@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1366</width>
-    <height>949</height>
+    <width>948</width>
+    <height>699</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -137,14 +137,14 @@
     <item>
      <layout class="QHBoxLayout" name="displayButtons">
       <item>
-       <widget class="QPushButton" name="profileButton">
+       <widget class="QPushButton" name="configButton">
         <property name="text">
          <string>Configuration</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="configButton">
+       <widget class="QPushButton" name="profileButton">
         <property name="text">
          <string>Profiles</string>
         </property>
