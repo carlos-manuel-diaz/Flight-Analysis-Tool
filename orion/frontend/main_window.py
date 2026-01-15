@@ -2,12 +2,13 @@ import sys
 import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog
 from PySide6.QtCore import Qt
-from .ui.orion_v5 import Ui_mainWindow
-from .ui.ui_profile.profile2 import Ui_Dialog
-from .backend.TrackerEngine import TrackerEngine
-from .backend.ProfileEngine import ProfileEngine
-from .backend.database import database_init, createDefaultProfile, loadProfileNames
+from ..ui.orion_v5 import Ui_mainWindow
+from ..ui.ui_profile.profile2 import Ui_Dialog
+from ..backend.TrackerEngine import TrackerEngine
+from ..backend.ProfileEngine import ProfileEngine
+from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
+from orion.frontend.profile_window import ProfileWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -149,37 +150,3 @@ class MainWindow(QMainWindow):
 
         self.profileWindow = ProfileWindow()
         self.profileWindow.exec()
-
-
-class ProfileWindow(QDialog):
-    def __init__(self):
-        super().__init__()
-        self.ui = Ui_Dialog()
-        self.ui.setupUi(self)
-
-        self.setWindowTitle("Configuration")
-        self.setBaseSize(500, 660)
-
-
-
-def main():
-    app = QApplication(sys.argv)
-
-    app.setApplicationName("Orion")
-    app.setApplicationVersion("1.0")
-    
-    # palette = QPalette()
-    # palette.setColor(QPalette.ColorRole.Window, QColor(0, 0, 0))  
-    # app.setPalette(palette)
-
-    app.setStyle('Fusion')
-    
-    database_init()
-    
-    
-    window = MainWindow()
-    window.setWindowIcon(QIcon("assets/seds.png"))
-    window.show()
-
-    sys.exit(app.exec())
-

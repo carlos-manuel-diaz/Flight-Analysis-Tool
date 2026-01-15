@@ -60,8 +60,31 @@ def loadProfileNames():
         print(f"Error fetching profile names: {e}")
         raise
 
+def getProfileDescription(profileName):
+    try:
+       with sqlite3.connect('profiles.db') as conn:
+          cursor = conn.cursor()
+          cursor.execute("SELECT description FROM profile WHERE name = ?", (profileName,))
+          row = cursor.fetchone()
+          return row[0] if row else None
+    except Exception as e:
+        print(f"Error fetching profile description: {e}")
+        raise
+          
 
 
-# def createProfile():
+def createProfile(profileName, description):
+    try:
+       with sqlite3.connect('profiles.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+                "INSERT INTO profile (name, description) VALUES (?, ?)",
+                (profileName, description),
+            )
+        conn.commit()
+        print(f"Profile: {profileName} created!" )
+    except Exception as e:
+        print(f"Error creating: {e}")
+        raise    
 
 # def deleteProfile():
