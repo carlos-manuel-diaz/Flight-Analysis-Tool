@@ -84,7 +84,7 @@ def createProfile(profileName, description):
         conn.commit()
         print(f"Profile: {profileName} created!" )
     except Exception as e:
-        print(f"Error creating: {e}")
+        print(f"Error creating profile: {e}")
         raise    
 
 # def deleteProfile():
