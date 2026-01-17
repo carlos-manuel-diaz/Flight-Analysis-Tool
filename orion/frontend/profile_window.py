@@ -6,7 +6,7 @@ from ..ui.orion_v5 import Ui_mainWindow
 from ..ui.ui_profile.profile2 import Ui_Dialog
 # from ..backend.TrackerEngine import TrackerEngine
 # from ..backend.ProfileEngine import ProfileEngine
-from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription
+from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, deleteProfile
 # from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 from orion.frontend.new_profile_dialog import NewProfileDialog
 
@@ -26,8 +26,10 @@ class ProfileWindow(QDialog):
     def connections(self):
             self.ui.listWidget_2.itemClicked.connect(self.onItemClicked)
             self.ui.newProfileButton_2.clicked.connect(self.newProfileClicked)
+            self.ui.deleteProfileButton_2.clicked.connect(self.deleteClicked)
 
     def refreshProfileList(self):
+        self.ui.listWidget_2.clear()
         for i in loadProfileNames():
             self.ui.listWidget_2.addItem(i)
 
@@ -39,5 +41,11 @@ class ProfileWindow(QDialog):
     def newProfileClicked(self):
         self.newProfileDialogue = NewProfileDialog()
         self.newProfileDialogue.exec()
-        
-    # def newProfileClicked():
+        self.refreshProfileList()
+    
+    def deleteClicked(self):
+        profileName = self.ui.listWidget_2.currentItem().text()
+        print("Profile to delete:", profileName)
+        deleteProfile(profileName)
+        self.refreshProfileList()
+        self.ui.descriptionBox_2.clear()

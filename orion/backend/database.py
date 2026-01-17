@@ -87,4 +87,16 @@ def createProfile(profileName, description):
         print(f"Error creating profile: {e}")
         raise    
 
-# def deleteProfile():
+def deleteProfile(profileName):
+   try:
+       with sqlite3.connect('profiles.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+                "DELETE FROM profile WHERE name = ?" ,
+                (profileName,)
+            )
+        conn.commit()
+        print(f"Profile: {profileName} deleted!" )
+   except Exception as e:
+        print(f"Error deleting profile: {e}")
+        raise    
