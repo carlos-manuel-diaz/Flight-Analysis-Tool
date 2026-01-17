@@ -12,8 +12,10 @@ from orion.frontend.new_profile_dialog import NewProfileDialog
 
 
 class ProfileWindow(QDialog):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, mainWindow, parent=None):
+        super().__init__(parent)
+        self.mainWindow = mainWindow
+
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
 

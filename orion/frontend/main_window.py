@@ -22,6 +22,7 @@ class MainWindow(QMainWindow):
         self.connections()
 
         createDefaultProfile()
+        self.refreshProfileList()
 
 
         # if createDefaultProfile():
@@ -144,9 +145,14 @@ class MainWindow(QMainWindow):
         for i in loadProfileNames():
             print(i)
 
+    def refreshProfileList(self):
+        self.ui.profileList.clear()
+        for i in loadProfileNames():
+            self.ui.profileList.addItem(i)
 
     def openProfileWindow(self):
         print("Opening profile window")
 
-        self.profileWindow = ProfileWindow()
+        self.profileWindow = ProfileWindow(self)
         self.profileWindow.exec()
+        self.refreshProfileList()
