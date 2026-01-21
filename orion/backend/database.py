@@ -13,9 +13,19 @@ def database_init():
         CREATE TABLE IF NOT EXISTS profile (
             profileId INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL, 
-            description TEXT    
+            description TEXT NOT NULL  
         )
+                   
 ''')
+    
+#     cursor.execute('''
+#         CREATE TABLE IF NOT EXISTS records (
+#             profileId INTEGER PRIMARY KEY AUTOINCREMENT,
+#             name TEXT NOT NULL, 
+#             description TEXT NOT NULL  
+#         )
+                   
+# ''')
     
 
 

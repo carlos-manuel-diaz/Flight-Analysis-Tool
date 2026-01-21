@@ -12,9 +12,12 @@ from orion.frontend.new_profile_dialog import NewProfileDialog
 
 
 class ProfileWindow(QDialog):
-    def __init__(self, mainWindow, parent=None):
+    def __init__(self, profileEngine, parent=None):
         super().__init__(parent)
-        self.mainWindow = mainWindow
+
+        self.engine = profileEngine
+        self.engine.activate()
+    
 
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
@@ -44,10 +47,18 @@ class ProfileWindow(QDialog):
         self.newProfileDialogue = NewProfileDialog()
         self.newProfileDialogue.exec()
         self.refreshProfileList()
-    
+        
     def deleteClicked(self):
         profileName = self.ui.listWidget_2.currentItem().text()
         print("Profile to delete:", profileName)
         deleteProfile(profileName)
         self.refreshProfileList()
         self.ui.descriptionBox_2.clear()
+
+
+
+    # def editClicked(self):
+
+    # def dialogEnd(self, result):
+    #     if result == QDialog.Accepted:
+    #         self.engine.save_profile()

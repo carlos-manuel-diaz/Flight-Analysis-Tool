@@ -16,12 +16,13 @@ class MainWindow(QMainWindow):
         self.ui = Ui_mainWindow()
         self.ui.setupUi(self)
 
-
-        self.trackerEngine = TrackerEngine()
-        self.profileEngine = ProfileEngine()
         self.connections()
 
+        self.trackerEngine = TrackerEngine()
+
+        self.profileEngine = ProfileEngine()
         createDefaultProfile()
+        self.profileEngine.grabProfiles()
         self.refreshProfileList()
 
 
@@ -147,12 +148,17 @@ class MainWindow(QMainWindow):
 
     def refreshProfileList(self):
         self.ui.profileList.clear()
-        for i in loadProfileNames():
+        for i in self.profileEngine.profileList:
             self.ui.profileList.addItem(i)
 
     def openProfileWindow(self):
         print("Opening profile window")
 
-        self.profileWindow = ProfileWindow(self)
+        self.profileWindow = ProfileWindow(self.profileEngine, self)
+        self.profileWindow.finished.connect(self.closeProfileWindow)
         self.profileWindow.exec()
+        
+    def closeProfileWindow(self, result):
+        self.profileEngine.grabProfiles()
         self.refreshProfileList()
+        
