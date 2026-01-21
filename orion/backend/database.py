@@ -7,22 +7,34 @@ def database_init():
   """ Creates database """ 
   try:
     conn = sqlite3.connect('profiles.db')
+    conn.execute("PRAGMA foreign_keys = ON")
     cursor = conn.cursor()
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS profile (
-            profileId INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL, 
-            description TEXT NOT NULL  
+            description TEXT NOT NULL,
+            attributes TEXT
         )
                    
 ''')
     
 #     cursor.execute('''
 #         CREATE TABLE IF NOT EXISTS records (
-#             profileId INTEGER PRIMARY KEY AUTOINCREMENT,
-#             name TEXT NOT NULL, 
-#             description TEXT NOT NULL  
+#             recordId INTEGER PRIMARY KEY AUTOINCREMENT,
+#             name TEXT UNIQUE NOT NULL, 
+#             profileId INTEGER,
+#             FOREIGN KEY(profileId) REFERENCES profile(id)
+#         )
+                   
+# ''')
+    
+#     cursor.execute('''
+#         CREATE TABLE IF NOT EXISTS attributes (
+#             profileId INTEGER,
+#             attributeName TEXT,        
+#             FOREIGN KEY(profileId) REFERENCES profile(id)
 #         )
                    
 # ''')
@@ -48,8 +60,11 @@ def createDefaultProfile() -> bool:
         check = cursor.fetchone()  
         if check[0] == 0:
            cursor.execute(
-                "INSERT INTO profile (name, description) VALUES (?, ?)",
-                ("Default", "Default profile created at app startup."),
+                "INSERT INTO profile (name, description, attributes) VALUES (?, ?, ?)",
+                ("Default", 
+                 "Default profile created at app startup.",
+                 '["acceleration_y", "time_elapsed"]'
+                 ),
             )
            conn.commit()
            print("Default profile created!")

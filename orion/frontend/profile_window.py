@@ -3,7 +3,7 @@ import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog
 from PySide6.QtCore import Qt
 from ..ui.orion_v5 import Ui_mainWindow
-from ..ui.ui_profile.profile2 import Ui_Dialog
+from ..ui.ui_profile.profile3 import Ui_Dialog
 # from ..backend.TrackerEngine import TrackerEngine
 # from ..backend.ProfileEngine import ProfileEngine
 from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, deleteProfile
@@ -28,20 +28,26 @@ class ProfileWindow(QDialog):
         self.setWindowTitle("Configuration")
         self.setBaseSize(500, 660)
 
+        self.ui.editBox.setDisabled(True)
+
+
     def connections(self):
-            self.ui.listWidget_2.itemClicked.connect(self.onItemClicked)
-            self.ui.newProfileButton_2.clicked.connect(self.newProfileClicked)
-            self.ui.deleteProfileButton_2.clicked.connect(self.deleteClicked)
+            self.ui.profileList.itemClicked.connect(self.onItemClicked)
+            self.ui.newProfileButton.clicked.connect(self.newProfileClicked)
+            self.ui.deleteProfileButton.clicked.connect(self.deleteClicked)
+            self.ui.editProfileButton.clicked.connect(
+                lambda: self.editClicked(self.ui.profileList.selectedItems()[0])
+            )
 
     def refreshProfileList(self):
-        self.ui.listWidget_2.clear()
+        self.ui.profileList.clear()
         for i in loadProfileNames():
-            self.ui.listWidget_2.addItem(i)
+            self.ui.profileList.addItem(i)
 
     def onItemClicked(self, item):
         profileName = item.text()
         print("Clicked profile:", profileName)
-        self.ui.descriptionBox_2.setPlainText(getProfileDescription(profileName))
+        self.ui.descriptionBox.setPlainText(getProfileDescription(profileName))
 
     def newProfileClicked(self):
         self.newProfileDialogue = NewProfileDialog()
@@ -49,15 +55,18 @@ class ProfileWindow(QDialog):
         self.refreshProfileList()
         
     def deleteClicked(self):
-        profileName = self.ui.listWidget_2.currentItem().text()
+        profileName = self.ui.profileList.currentItem().text()
         print("Profile to delete:", profileName)
         deleteProfile(profileName)
         self.refreshProfileList()
-        self.ui.descriptionBox_2.clear()
+        self.ui.descriptionBox.clear()
 
 
 
-    # def editClicked(self):
+    def editClicked(self, item):
+         print("Editing profile: ", item.text())
+         
+         
 
     # def dialogEnd(self, result):
     #     if result == QDialog.Accepted:
