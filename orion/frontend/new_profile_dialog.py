@@ -3,7 +3,7 @@ import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog, QMessageBox
 from PySide6.QtCore import Qt
 from ..ui.orion_v5 import Ui_mainWindow
-from ..ui.ui_profile.createProfile import Ui_createProfileDialog
+from ..ui.ui_profile.createProfile2 import Ui_createProfileDialog
 from ..backend.TrackerEngine import TrackerEngine
 from ..backend.ProfileEngine import ProfileEngine
 from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, createProfile
