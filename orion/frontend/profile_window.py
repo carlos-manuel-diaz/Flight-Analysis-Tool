@@ -6,7 +6,7 @@ from ..ui.orion_v5 import Ui_mainWindow
 from ..ui.ui_profile.profile3 import Ui_Dialog
 # from ..backend.TrackerEngine import TrackerEngine
 # from ..backend.ProfileEngine import ProfileEngine
-from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, deleteProfile
+from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, deleteProfile, getProfileXAttributes, getProfileYAttributes
 # from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 from orion.frontend.new_profile_dialog import NewProfileDialog
 
@@ -35,10 +35,14 @@ class ProfileWindow(QDialog):
             self.ui.profileList.itemClicked.connect(self.onItemClicked)
             self.ui.newProfileButton.clicked.connect(self.newProfileClicked)
             self.ui.deleteProfileButton.clicked.connect(self.deleteClicked)
+
             self.ui.editProfileButton.clicked.connect(
                 lambda: self.editClicked(self.ui.profileList.selectedItems()[0])
             )
+
             self.ui.confirmButton.clicked.connect(self.editConfirmed)
+
+
 
     def refreshProfileList(self):
         self.ui.profileList.clear()
@@ -49,6 +53,9 @@ class ProfileWindow(QDialog):
         profileName = item.text()
         print("Clicked profile:", profileName)
         self.ui.descriptionBox.setPlainText(getProfileDescription(profileName))
+
+        self.refreshXAttributes(profileName)
+        self.refreshYAttributes(profileName)
 
     def newProfileClicked(self):
         self.newProfileDialogue = NewProfileDialog()
@@ -75,11 +82,15 @@ class ProfileWindow(QDialog):
          self.ui.editBox.setDisabled(True)
          self.ui.profileBox.setDisabled(False)
          
-    # def refreshXAttributes(self):
-         
+    def refreshXAttributes(self, profileName):
+         self.ui.attributeList.clear()
+         for i in getProfileXAttributes(profileName):
+            self.ui.attributeList.addItem(i)
 
-    # def refreshXAttributes(self):
-       
+    def refreshYAttributes(self, profileName):
+         self.ui.attributeList_2.clear()
+         for i in getProfileYAttributes(profileName):
+            self.ui.attributeList_2.addItem(i)
 
     # def dialogEnd(self, result):
     #     if result == QDialog.Accepted:
