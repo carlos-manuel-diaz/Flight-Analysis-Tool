@@ -38,6 +38,7 @@ class ProfileWindow(QDialog):
             self.ui.editProfileButton.clicked.connect(
                 lambda: self.editClicked(self.ui.profileList.selectedItems()[0])
             )
+            self.ui.confirmButton.clicked.connect(self.editConfirmed)
 
     def refreshProfileList(self):
         self.ui.profileList.clear()
@@ -65,8 +66,20 @@ class ProfileWindow(QDialog):
 
     def editClicked(self, item):
          print("Editing profile: ", item.text())
+         self.ui.editBox.setDisabled(False)
+         self.ui.profileBox.setDisabled(True)
+        #  self.ui.editBox.objectName = item.text()
+
+
+    def editConfirmed(self):
+         self.ui.editBox.setDisabled(True)
+         self.ui.profileBox.setDisabled(False)
          
+    # def refreshXAttributes(self):
          
+
+    # def refreshXAttributes(self):
+       
 
     # def dialogEnd(self, result):
     #     if result == QDialog.Accepted:
