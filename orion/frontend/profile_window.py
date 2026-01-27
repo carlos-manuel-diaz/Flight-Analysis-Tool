@@ -1,13 +1,12 @@
 import sys
 import csv
-from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog
+from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog, QInputDialog, QLineEdit
 from PySide6.QtCore import Qt
 from ..ui.orion_v5 import Ui_mainWindow
 from ..ui.ui_profile.profile3 import Ui_Dialog
 # from ..backend.TrackerEngine import TrackerEngine
 # from ..backend.ProfileEngine import ProfileEngine
-from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, deleteProfile, getProfileXAttributes, getProfileYAttributes
-# from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
+from ..backend.database.database import *
 from orion.frontend.new_profile_dialog import NewProfileDialog
 
 
@@ -40,6 +39,8 @@ class ProfileWindow(QDialog):
                 lambda: self.editClicked(self.ui.profileList.selectedItems()[0])
             )
 
+            self.ui.newAttribute.clicked.connect(self.newXAttributeClicked)
+            # self.ui.deleteAttribute.clicked.connect(self.deleteXAttributeClicked)
             self.ui.confirmButton.clicked.connect(self.editConfirmed)
 
 
@@ -91,6 +92,27 @@ class ProfileWindow(QDialog):
          self.ui.attributeList_2.clear()
          for i in getProfileYAttributes(profileName):
             self.ui.attributeList_2.addItem(i)
+
+
+    def newXAttributeClicked(self):
+        # Open text input dialog
+        text, ok = QInputDialog.getText(
+            self,
+            "Input Dialog",           # Dialog title
+            "Enter your text:",       # Label inside the dialog
+            QLineEdit.Normal,         # Input mode
+            ""                        # Default text
+        )
+
+        if ok and text:
+            addXAttribute(self.ui.profileList.currentItem().text(), text)
+
+        self.refreshXAttributes(self.ui.profileList.currentItem().text())
+
+    # def deleteXAttributeClicked(self):
+    #         deleteXAttribute(self.ui.profileList.currentItem().text(), self.ui.attributeList.currentItem().text())
+    #         self.refreshXAttributes()
+
 
     # def dialogEnd(self, result):
     #     if result == QDialog.Accepted:

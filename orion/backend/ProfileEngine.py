@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt
 from ..ui.orion_v5 import Ui_mainWindow
 from ..ui.ui_profile.profile2 import Ui_Dialog
-from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, deleteProfile
+from .database.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, deleteProfile
 
 
 class ProfileEngine:

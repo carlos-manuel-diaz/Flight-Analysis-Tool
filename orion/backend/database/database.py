@@ -29,12 +29,8 @@ def database_init():
 #         )
                    
 # ''')
-    
-    
-
 
     conn.commit()
-
     
 
     conn.close()
@@ -104,9 +100,21 @@ def createProfile(profileName, description):
     try:
        with sqlite3.connect('profiles.db') as conn:
         cursor = conn.cursor()
+
+        x_key = ["time_elapsed"]
+        x_data = json.dumps(x_key)
+
+        y_key = ["acceleration_y"]
+        y_data = json.dumps(y_key)
+
         cursor.execute(
-                "INSERT INTO profile (name, description) VALUES (?, ?)",
-                (profileName, description),
+                "INSERT INTO profile (name, description, x_attributes, y_attributes) VALUES (?, ?, ?, ?)",
+                (
+                   profileName, 
+                   description,
+                   x_data,
+                   y_data,
+                ),
             )
         conn.commit()
         print(f"Profile: {profileName} created!" )
@@ -135,7 +143,11 @@ def getProfileXAttributes(profileName):
           cursor.execute("SELECT x_attributes FROM profile WHERE name = ?", (profileName,))
           row = cursor.fetchone()
           retrieved_list = json.loads(row[0])
-          return retrieved_list
+          print(retrieved_list)
+          if retrieved_list is not None:
+            return retrieved_list
+          else:
+             return
    except Exception as e:
         print(f"Error fetching x attributes: {e}")
         raise
@@ -147,7 +159,70 @@ def getProfileYAttributes(profileName):
           cursor.execute("SELECT y_attributes FROM profile WHERE name = ?", (profileName,))
           row = cursor.fetchone()
           retrieved_list = json.loads(row[0])
-          return retrieved_list
+          print(retrieved_list)
+          if retrieved_list is not None:
+            return retrieved_list
+          else:
+             return
    except Exception as e:
         print(f"Error fetching y attributes: {e}")
         raise
+   
+
+def addXAttribute(profileName, newAttribute):
+   try:
+       with sqlite3.connect('profiles.db') as conn:
+          #Fetch attributes 
+          cursor = conn.cursor()
+          cursor.execute("SELECT x_attributes FROM profile WHERE name = ?", (profileName,))
+          row = cursor.fetchone()
+          retrieved_list = json.loads(row[0])
+          
+          # Add or delete attribute  
+          if retrieved_list is not None:
+            if newAttribute not in retrieved_list:
+                retrieved_list.append(newAttribute)
+          else:
+             return
+          
+          # Update attribute list
+          cursor.execute(
+                "UPDATE profile SET x_attributes = ? WHERE name = ?",
+                (
+                   json.dumps(retrieved_list), 
+                   profileName
+                )
+            )
+
+          conn.commit()
+   except Exception as e:
+        print(f"Error fetching x attributes: {e}")
+        raise
+   
+def deleteXAttribute(profileName, selectedAttribute):
+    try:
+       with sqlite3.connect('profiles.db') as conn:
+          #Fetch attributes 
+          cursor = conn.cursor()
+          cursor.execute("SELECT x_attributes FROM profile WHERE name = ?", (profileName,))
+          row = cursor.fetchone()
+          retrieved_list = json.loads(row[0])
+          
+          # Add or delete attribute  
+          if retrieved_list is not None:
+                retrieved_list.remove(selectedAttribute)
+          
+          # Update attribute list
+          cursor.execute(
+                "UPDATE profile SET x_attributes = ? WHERE name = ?",
+                (
+                   json.dumps(retrieved_list), 
+                   profileName
+                )
+            )
+
+          conn.commit()
+    except Exception as e:
+        print(f"Error fetching x attributes: {e}")
+        raise
+

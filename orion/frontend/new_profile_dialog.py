@@ -6,7 +6,7 @@ from ..ui.orion_v5 import Ui_mainWindow
 from ..ui.ui_profile.createProfile2 import Ui_createProfileDialog
 from ..backend.TrackerEngine import TrackerEngine
 from ..backend.ProfileEngine import ProfileEngine
-from ..backend.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, createProfile
+from ..backend.database.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, createProfile
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 
 
