@@ -40,7 +40,11 @@ class ProfileWindow(QDialog):
             )
 
             self.ui.newAttribute.clicked.connect(self.newXAttributeClicked)
-            # self.ui.deleteAttribute.clicked.connect(self.deleteXAttributeClicked)
+            self.ui.deleteAttribute.clicked.connect(self.deleteXAttributeClicked)
+
+            self.ui.newAttribute_2.clicked.connect(self.newYAttributeClicked)
+            self.ui.deleteAttribute_2.clicked.connect(self.deleteYAttributeClicked)
+
             self.ui.confirmButton.clicked.connect(self.editConfirmed)
 
 
@@ -109,9 +113,28 @@ class ProfileWindow(QDialog):
 
         self.refreshXAttributes(self.ui.profileList.currentItem().text())
 
-    # def deleteXAttributeClicked(self):
-    #         deleteXAttribute(self.ui.profileList.currentItem().text(), self.ui.attributeList.currentItem().text())
-    #         self.refreshXAttributes()
+    def deleteXAttributeClicked(self):
+            deleteXAttribute(self.ui.profileList.currentItem().text(), self.ui.attributeList.currentItem().text())
+            self.refreshXAttributes(self.ui.profileList.currentItem().text())
+
+    def newYAttributeClicked(self):
+        # Open text input dialog
+        text, ok = QInputDialog.getText(
+            self,
+            "Input Dialog",           # Dialog title
+            "Enter your text:",       # Label inside the dialog
+            QLineEdit.Normal,         # Input mode
+            ""                        # Default text
+        )
+
+        if ok and text:
+            addYAttribute(self.ui.profileList.currentItem().text(), text)
+
+        self.refreshYAttributes(self.ui.profileList.currentItem().text())
+
+    def deleteYAttributeClicked(self):
+            deleteYAttribute(self.ui.profileList.currentItem().text(), self.ui.attributeList_2.currentItem().text())
+            self.refreshYAttributes(self.ui.profileList.currentItem().text())
 
 
     # def dialogEnd(self, result):

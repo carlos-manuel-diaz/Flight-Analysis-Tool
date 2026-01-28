@@ -226,3 +226,59 @@ def deleteXAttribute(profileName, selectedAttribute):
         print(f"Error fetching x attributes: {e}")
         raise
 
+def addYAttribute(profileName, newAttribute):
+   try:
+       with sqlite3.connect('profiles.db') as conn:
+          #Fetch attributes 
+          cursor = conn.cursor()
+          cursor.execute("SELECT y_attributes FROM profile WHERE name = ?", (profileName,))
+          row = cursor.fetchone()
+          retrieved_list = json.loads(row[0])
+          
+          # Add or delete attribute  
+          if retrieved_list is not None:
+            if newAttribute not in retrieved_list:
+                retrieved_list.append(newAttribute)
+          else:
+             return
+          
+          # Update attribute list
+          cursor.execute(
+                "UPDATE profile SET y_attributes = ? WHERE name = ?",
+                (
+                   json.dumps(retrieved_list), 
+                   profileName
+                )
+            )
+
+          conn.commit()
+   except Exception as e:
+        print(f"Error fetching y attributes: {e}")
+        raise
+   
+def deleteYAttribute(profileName, selectedAttribute):
+    try:
+       with sqlite3.connect('profiles.db') as conn:
+          #Fetch attributes 
+          cursor = conn.cursor()
+          cursor.execute("SELECT y_attributes FROM profile WHERE name = ?", (profileName,))
+          row = cursor.fetchone()
+          retrieved_list = json.loads(row[0])
+          
+          # Add or delete attribute  
+          if retrieved_list is not None:
+                retrieved_list.remove(selectedAttribute)
+          
+          # Update attribute list
+          cursor.execute(
+                "UPDATE profile SET y_attributes = ? WHERE name = ?",
+                (
+                   json.dumps(retrieved_list), 
+                   profileName
+                )
+            )
+
+          conn.commit()
+    except Exception as e:
+        print(f"Error fetching y attributes: {e}")
+        raise
