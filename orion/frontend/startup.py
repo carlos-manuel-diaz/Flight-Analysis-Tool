@@ -2,14 +2,10 @@ import sys
 import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog
 from PySide6.QtCore import Qt
-from ..ui.orion_v5 import Ui_mainWindow
-from ..ui.ui_profile.profile2 import Ui_Dialog
-from ..backend.TrackerEngine import TrackerEngine
-from ..backend.ProfileEngine import ProfileEngine
 from ..backend.database.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription
+from ..backend.utils.paths import createCsvDirectory
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 from orion.frontend.main_window import MainWindow
-
 
 
 def main():
@@ -25,6 +21,7 @@ def main():
     app.setStyle('Fusion')
     
     database_init()
+    createCsvDirectory()
     
     
     window = MainWindow()
