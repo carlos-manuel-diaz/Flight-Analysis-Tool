@@ -154,11 +154,16 @@ class MainWindow(QMainWindow):
     def openProfileWindow(self):
         print("Opening profile window")
 
+        last_index = self.ui.profileList.currentIndex()
+
         self.profileWindow = ProfileWindow(self.profileEngine, self)
-        self.profileWindow.finished.connect(self.closeProfileWindow)
+        self.profileWindow.finished.connect(
+            lambda : self.closeProfileWindow(last_index)
+        )
         self.profileWindow.exec()
         
-    def closeProfileWindow(self, result):
+    def closeProfileWindow(self, lastSelectedProfile):
         self.profileEngine.grabProfiles()
         self.refreshProfileList()
+        self.ui.profileList.setCurrentIndex(lastSelectedProfile)
         
